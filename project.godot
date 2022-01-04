@@ -1,0 +1,37 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+[application]
+
+config/name="stream-animation"
+run/main_scene="res://main.tscn"
+config/icon="res://icon.png"
+
+[debug]
+
+gdscript/warnings/treat_warnings_as_errors=true
+gdscript/warnings/exclude_addons=false
+gdscript/warnings/unused_class_variable=true
+gdscript/warnings/return_value_discarded=false
+gdscript/warnings/unsafe_property_access=true
+gdscript/warnings/unsafe_method_access=true
+gdscript/warnings/unsafe_call_argument=true
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/node_referencer/plugin.cfg" )
+
+[physics]
+
+common/enable_pause_aware_picking=true
+
+[rendering]
+
+environment/default_environment="res://default_env.tres"

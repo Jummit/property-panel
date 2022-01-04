@@ -1,0 +1,1 @@
+https://github.com/Jummit/node-referencer-addon.git 37dba92
