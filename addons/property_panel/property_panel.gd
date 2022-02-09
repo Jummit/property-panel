@@ -84,7 +84,7 @@ func load_values(instance) -> void:
 	set_block_signals(true)
 	for container in _properties_container.get_children():
 		if not container is Label:
-			var value = instance[container.property.name]
+			var value = instance.get(container.property.name)
 			if value != null:
 				container.set_value(value)
 	set_block_signals(false)
