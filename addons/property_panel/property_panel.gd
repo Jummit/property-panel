@@ -35,6 +35,7 @@ export(Orientation) var orientation := Orientation.VERTICAL
 const PropertyContainer := preload("property_container/property_container.gd")
 
 var _property_container_scene := preload("property_container/property_container.tscn")
+# Each editable member's `PropertyContainer`.
 var _property_containers : Dictionary
 
 onready var _properties_container : Container
@@ -73,9 +74,12 @@ func get_values() -> Dictionary:
 
 # Store the property/value pairs in an Object or Dictionary.
 func store_values(instance) -> void:
-	var property_values := get_values()
-	for value in property_values:
-		instance[value] = property_values[value]
+	for property in _property_containers:
+		var value = _property_containers[property].get_value()
+		if instance is Object:
+			instance.set(property, value)
+		elif instance is Dictionary:
+			instance[property] = value
 
 
 # Load the property values from an Object/Dictionary.
@@ -109,7 +113,7 @@ func set_properties(properties : Array) -> void:
 			container.connect("property_changed", self,
 					"_on_Property_changed", [container])
 			
-			_property_containers[property] = _properties_container
+			_property_containers[property.name] = container
 			_properties_container.add_child(container)
 			container.setup(property)
 
