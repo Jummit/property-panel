@@ -6,27 +6,38 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
+config_version=5
+
+_global_script_classes=[{
+"base": "Panel",
+"class": &"PropertyPanel",
+"language": &"GDScript",
+"path": "res://addons/property_panel/property_panel.gd"
+}]
+_global_script_class_icons={
+"PropertyPanel": ""
+}
 
 [application]
 
 config/name="stream-animation"
 run/main_scene="res://main.tscn"
-config/icon="res://icon.png"
+config/features=PackedStringArray("4.0")
+config/icon="res://icon.svg"
 
 [debug]
 
 gdscript/warnings/treat_warnings_as_errors=true
 gdscript/warnings/exclude_addons=false
-gdscript/warnings/unused_class_variable=true
 gdscript/warnings/return_value_discarded=false
 gdscript/warnings/unsafe_property_access=true
 gdscript/warnings/unsafe_method_access=true
 gdscript/warnings/unsafe_call_argument=true
+gdscript/warnings/unused_class_variable=true
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/node_referencer/plugin.cfg" )
+enabled=PackedStringArray()
 
 [physics]
 
