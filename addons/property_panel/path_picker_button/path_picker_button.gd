@@ -1,34 +1,29 @@
 extends Button
 
-"""
-A `Button` to select a path to be used in a `PropertyPanel`
+## A [Button] to select a path to be used in a [PropertyPanel]
 
-Right-clicking clears the path.
-"""
+## Right-clicking clears the path.
 
 signal changed
+signal dialog_opened
 
-var path := "" setget set_path
-
-onready var file_dialog : FileDialog = $FileDialog
+var path := "" :
+	set(to):
+		path = to
+		text = path.get_file()
+		tooltip_text = path
 
 func _gui_input(event : InputEvent) -> void:
 	var button_ev = event as InputEventMouseButton
-	if button_ev and button_ev.pressed and button_ev.button_index == BUTTON_RIGHT:
-			set_path("")
+	if button_ev and button_ev.pressed and button_ev.button_index == MOUSE_BUTTON_RIGHT:
+			path = ""
 			emit_signal("changed")
 
 
-func set_path(to : String) -> void:
-	path = to
-	text = path.get_file()
-	hint_tooltip = path
-
-
-func _on_FileDialog_file_selected(selected_path : String) -> void:
-	set_path(selected_path)
+func select_path(selected_path : String) -> void:
+	path = selected_path
 	emit_signal("changed")
 
 
 func _pressed() -> void:
-	file_dialog.popup_centered()
+	dialog_opened.emit()

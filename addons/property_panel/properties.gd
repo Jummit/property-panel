@@ -1,9 +1,7 @@
-"""
-Properties used to edit values in a `PropertyPanel`.
+## Properties used to edit values in a [PropertyPanel].
 
-Each property can create a `Control` and specifies the signal it emits when it
-changed. It also specifies which member of the control is the resulting value.
-"""
+## Each property can create a `Control` and specifies the signal it emits when it
+## changed. It also specifies which member of the control is the resulting value.
 
 class Property:
 	var name : String
@@ -11,8 +9,7 @@ class Property:
 	var property_variable : String
 	var default
 	
-	func _init(_changed_signal : String, _property_variable : String,
-			_name : String, _default):
+	func _init(_changed_signal : String,_property_variable : String,_name : String,_default):
 		changed_signal = _changed_signal
 		property_variable = _property_variable
 		name = _name
@@ -40,10 +37,10 @@ class Property:
 
 
 class EnumProperty extends Property:
-	var choices : PoolStringArray
+	var choices : PackedStringArray
 	
-	func _init(_name : String, _choices : PoolStringArray,
-			_default = null).("item_selected", "", _name, _default):
+	func _init(_name,_choices,_default = null):
+		super("item_selected", "", _name, _default)
 		choices = _choices
 		default = _default
 		if _default == null:
@@ -66,18 +63,16 @@ class EnumProperty extends Property:
 
 
 class StringProperty extends Property:
-	func _init(_name : String, _default := "").("text_changed", "text", _name,
-			_default):
-		pass
+	func _init(_name : String,_default := ""):
+		super("text_changed", "text", _name, _default)
 	
 	func _get_control() -> Control:
 		return LineEdit.new()
 
 
 class BoolProperty extends Property:
-	func _init(_name : String, _default := false).("toggled", "pressed", _name,
-			_default):
-		pass
+	func _init(_name,_default := false):
+		super("toggled", "button_pressed", _name, _default)
 	
 	func _get_control() -> Control:
 		return CheckBox.new()
@@ -90,13 +85,13 @@ class RangeProperty extends Property:
 	
 	const FloatSlider = preload("float_slider/float_slider.gd")
 	
-	func _init(_name : String, _step : float, _default := 0.0).("changed",
-			"value", _name, _default):
+	func _init(_name,_default,_step):
+		super("changed", "value", _name, _default)
 		_step = step
 	
 	func _get_control() -> Control:
 		var slider : FloatSlider = preload(
-				"float_slider/float_slider.tscn").instance()
+				"float_slider/float_slider.tscn").instantiate()
 		slider.min_value = from
 		slider.max_value = to
 		slider.step = step
@@ -104,33 +99,32 @@ class RangeProperty extends Property:
 
 
 class IntProperty extends RangeProperty:
-	func _init(_name : String, _from : float, _to : float, _default := 0.0
-			).(_name, 1, _default):
+	func _init(_name,_from,_to,_default = _from):
+		super(_name, 1, _default)
 		from = _from
 		to = _to
 
 
 class FloatProperty extends RangeProperty:
-	func _init(_name : String, _from : float, _to : float, _default := 0.0
-			).(_name, 0.01, _default):
+	func _init(_name,_from=0.0,_to=1.0,_default = _from):
+		super(_name, 0.01, _default)
 		from = _from
 		to = _to
 
 
 class ColorProperty extends Property:
-	func _init(_name : String, _default := Color.white).("color_changed",
-			"color", _name, _default):
-		pass
+	func _init(_name,_default := Color.WHITE):
+		super("color_changed", "color", _name, _default)
 	
 	func _get_control() -> Control:
 		return ColorPickerButton.new()
 
 
 class FilePathProperty extends Property:
-	func _init(_name : String, _default := "").("changed", "path", _name,
-			_default):
+	func _init(_name : String,_default := ""):
+		super("changed", "path", _name, _default)
 		pass
 	
 	func _get_control() -> Control:
-		return preload("path_picker_button/path_picker_button.tscn").instance()\
+		return preload("path_picker_button/path_picker_button.tscn").instantiate()\
 				as Control

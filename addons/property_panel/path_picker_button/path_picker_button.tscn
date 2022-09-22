@@ -1,27 +1,9 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://djcq0q2ve35e"]
 
-[ext_resource path="res://addons/property_panel/path_picker_button/path_picker_button.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://addons/property_panel/path_picker_button/path_picker_button.gd" id="1"]
 
 [node name="PathPickerButton" type="Button"]
-margin_right = 12.0
-margin_bottom = 20.0
+offset_right = 12.0
+offset_bottom = 20.0
 clip_text = true
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="FileDialog" type="FileDialog" parent="."]
-margin_right = 553.0
-margin_bottom = 317.0
-window_title = "Open a File"
-dialog_hide_on_ok = true
-mode = 0
-access = 2
-current_dir = "/home/jummit/godot/projects/material-painter"
-current_path = "/home/jummit/godot/projects/material-painter/"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]
+script = ExtResource("1")

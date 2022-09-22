@@ -1,25 +1,25 @@
 extends Panel
+class_name PropertyPanel
 
-"""
-An inspector-like panel that builds a list of `PropertyContainer`s.
-
-When the `properties` are set, a `PropertyContainer` is generated for each
-property.
-The resulting values can be retrieved using `get_value` and `get_values`.
-A `Dictionary` similar to the result of `get_values` can be given to
-`load_values` to update the values of the `PropertyContainers`s.
-
-Usage:
-```
-const Properties = preload("res://addons/property_panel/properties.gd")
-
-property_panel.set_properties([
-	Properties.BoolProperty.new("Active"),
-	Properties.FloatProperty.new("Size", 1, 5),
-	Properties.EnumProperty.new("Distance", ["Far", "Near"]),
-])
-```
-"""
+## An inspector-like panel that builds a list of `PropertyContainer`s.
+## 
+## When the `properties` are set, a `PropertyContainer` is generated for each
+## property.
+## The resulting values can be retrieved using `get_value` and `get_values`.
+## A `Dictionary` similar to the result of `get_values` can be given to
+## [code]load_values[/code] to update the values of the `PropertyContainers`s.
+## 
+## [b]Usage[/b]:
+##
+## [codeblock]
+## const Properties = preload("res://addons/property_panel/properties.gd")
+## 
+## property_panel.set_properties([
+## 	Properties.BoolProperty.new("Active"),
+## 	Properties.FloatProperty.new("Size", 1, 5),
+## 	Properties.EnumProperty.new("Distance", ["Far", "Near"]),
+## ])
+## [/codeblock]
 
 enum Orientation {
 	VERTICAL,
@@ -28,21 +28,22 @@ enum Orientation {
 
 signal property_changed(property, value)
 
-# Whether the properties should be alligned from left to right or from top to
-# bottom.
-export(Orientation) var orientation := Orientation.VERTICAL
+## Whether the properties should be alligned from left to right or from top to
+## bottom.
+@export var orientation : Orientation = Orientation.VERTICAL
 
 const PropertyContainer := preload("property_container/property_container.gd")
+const Properties := preload("properties.gd")
 
 var _property_container_scene := preload("property_container/property_container.tscn")
 # Each editable member's `PropertyContainer`.
 var _property_containers : Dictionary
 
-onready var _properties_container : Container
-onready var _scroll_container : ScrollContainer = $ScrollContainer
+@onready var _file_dialog = %FileDialog
+@onready var _properties_container : Container
+@onready var _scroll_container : ScrollContainer = $ScrollContainer
 
 func _ready():
-# warning-ignore:incompatible_ternary
 	_properties_container = HBoxContainer.new() if\
 			orientation == Orientation.HORIZONTAL else VBoxContainer.new()
 	_properties_container.size_flags_horizontal = SIZE_EXPAND_FILL
@@ -104,18 +105,29 @@ func set_properties(properties : Array) -> void:
 		if property is String:
 			# A section title.
 			var label := Label.new()
-			label.align = Label.ALIGN_CENTER
+			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			label.text = property
 			_properties_container.add_child(label)
 		else:
-			var container = _property_container_scene.instance()
+			var container := _property_container_scene.instantiate()
 			container.name = property.name
-			container.connect("property_changed", self,
-					"_on_Property_changed", [container])
+			container.property_changed.connect(_on_Property_changed.bind(container))
 			
 			_property_containers[property.name] = container
 			_properties_container.add_child(container)
-			container.setup(property)
+			var control : Control = container.setup(property)
+			if property is Properties.FilePathProperty:
+				control.dialog_opened.connect(_on_path_picker_button_dialog_opened.bind(control))
+
+
+func _on_path_picker_button_dialog_opened(control):
+	_file_dialog.popup_centered_ratio()
+	_file_dialog.set_meta("control", control)
+
+
+
+func _on_file_dialog_file_selected(path):
+	_file_dialog.get_meta("control").select_path(path)
 
 
 # Clears the panel, removing every property and section title.
@@ -125,3 +137,4 @@ func clear() -> void:
 
 func _on_Property_changed(value, container : PropertyContainer):
 	emit_signal("property_changed", container.property.name, value)
+
