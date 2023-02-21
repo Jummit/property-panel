@@ -20,7 +20,8 @@ _global_script_class_icons={
 
 [application]
 
-config/name="stream-animation"
+config/name="Property Panel"
+config/description="A panel similar to the Inspector inside the Godot Engine. Can be used to expose various values inside tools/games."
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.0")
 config/icon="res://icon.svg"
