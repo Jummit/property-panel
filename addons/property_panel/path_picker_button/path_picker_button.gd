@@ -7,7 +7,7 @@ extends Button
 signal changed
 signal dialog_opened
 
-var path := "" :
+var path := "":
 	set(to):
 		path = to
 		text = path.get_file()

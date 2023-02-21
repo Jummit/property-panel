@@ -22,7 +22,7 @@ func setup(_property) -> Control:
 	property_control.size_flags_horizontal = SIZE_EXPAND_FILL
 	property_control.size_flags_vertical = SIZE_EXPAND_FILL
 	property_control.custom_minimum_size.x = 60
-	property_control.set_drag_forwarding(self)
+	property_control.set_drag_forwarding(func(): pass, _can_drop_data_fw, _drop_data_fw)
 	# This is a little hacky; since the argument count of signal callbacks have.
 	var args = 0
 	for signal_info in property_control.get_signal_list():

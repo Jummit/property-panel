@@ -30,7 +30,7 @@ signal property_changed(property, value)
 
 ## Whether the properties should be alligned from left to right or from top to
 ## bottom.
-@export var orientation : Orientation = Orientation.VERTICAL
+@export var orientation := Orientation.VERTICAL
 
 const PropertyContainer := preload("property_container/property_container.gd")
 const Properties := preload("properties.gd")
@@ -56,7 +56,7 @@ func get_value(property : String):
 
 
 func set_value(property : String, value):
-	return (_property_containers[property] as PropertyContainer).set_value(value)
+	(_property_containers[property] as PropertyContainer).set_value(value)
 
 
 # Returns true if the property is exposed.
@@ -137,4 +137,3 @@ func clear() -> void:
 
 func _on_Property_changed(value, container : PropertyContainer):
 	emit_signal("property_changed", container.property.name, value)
-
