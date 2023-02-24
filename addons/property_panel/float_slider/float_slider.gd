@@ -87,8 +87,9 @@ func _draw() -> void:
 			texture = preload("selected_grabber.svg")
 		draw_texture(texture, _get_grabber_pos() - texture.get_size() / 2)
 	else:
-		var size := Vector2(4, 2)
-		draw_rect(Rect2(_get_grabber_pos() - Vector2.RIGHT * 2, size), Color.WHITE)
+		var grabber_size := Vector2(4, 2)
+		draw_rect(Rect2(_get_grabber_pos() - Vector2.RIGHT * 2, grabber_size),
+				Color.WHITE)
 
 
 func _get_change_modifier() -> float:

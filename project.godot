@@ -8,16 +8,6 @@
 
 config_version=5
 
-_global_script_classes=[{
-"base": "Panel",
-"class": &"PropertyPanel",
-"language": &"GDScript",
-"path": "res://addons/property_panel/property_panel.gd"
-}]
-_global_script_class_icons={
-"PropertyPanel": ""
-}
-
 [application]
 
 config/name="Property Panel"
@@ -28,12 +18,12 @@ config/icon="res://icon.svg"
 
 [debug]
 
-gdscript/warnings/treat_warnings_as_errors=true
 gdscript/warnings/exclude_addons=false
 gdscript/warnings/return_value_discarded=false
 gdscript/warnings/unsafe_property_access=true
 gdscript/warnings/unsafe_method_access=true
 gdscript/warnings/unsafe_call_argument=true
+gdscript/warnings/treat_warnings_as_errors=true
 gdscript/warnings/unused_class_variable=true
 
 [editor_plugins]

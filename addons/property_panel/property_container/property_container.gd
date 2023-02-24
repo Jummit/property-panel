@@ -1,3 +1,4 @@
+class_name PropertyContainer
 extends HBoxContainer
 
 ## An item in a `PropertyPanel`
@@ -10,7 +11,7 @@ signal property_changed(value)
 
 const Property = preload("../properties.gd").Property
 
-var property
+var property: Property
 var property_control : Control
 
 @onready var name_label : Label = $Name
@@ -27,7 +28,7 @@ func setup(_property) -> Control:
 	var args = 0
 	for signal_info in property_control.get_signal_list():
 		if signal_info.name == property.changed_signal:
-			args = 2 - signal_info.args.size()
+			args = 2 - (signal_info.args as Array).size()
 			break
 	if args == 0:
 		property_control.connect(property.changed_signal, _on_PropertyControl_changed)
