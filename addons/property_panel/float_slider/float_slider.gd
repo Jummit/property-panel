@@ -103,7 +103,13 @@ func _on_focus_exited():
 
 func _on_text_changed(new_text : String) -> void:
 	if new_text.is_valid_float():
+		var last_carret := caret_column
 		value = _correct(new_text.to_float())
+		# Avoid emitting [method _on_text_changed].
+		set_block_signals(true)
+		text = new_text
+		set_block_signals(false)
+		caret_column = last_carret
 		emit_signal("changed")
 
 
