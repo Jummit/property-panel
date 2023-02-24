@@ -43,13 +43,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -46.0
-offset_top = -46.0
-offset_right = 46.0
-offset_bottom = 46.0
+offset_left = -60.0
+offset_top = -60.0
+offset_right = 60.0
+offset_bottom = 60.0
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(32, 32)
+pivot_offset = Vector2(60, 60)
 texture = ExtResource("3_5w8pe")
 
 [connection signal="property_changed" from="MiddlePropertyPanel" to="." method="_on_MiddlePropertyPanel_property_changed"]
