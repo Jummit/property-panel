@@ -1,16 +1,12 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://hr5eq3xc3vdg"]
 
-[ext_resource path="res://addons/property_panel/float_slider/float_slider.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://addons/property_panel/float_slider/float_slider.gd" id="1"]
 
 [node name="FloatSlider" type="LineEdit"]
 offset_right = 58.0
 offset_bottom = 24.0
 mouse_filter = 2
-placeholder_alpha = 0.196
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource("1")
 value = 0.051
 min_value = 0.211
 

@@ -1,6 +1,6 @@
 extends LineEdit
 
-## A number slider similar to that found in Godot Engine's inspector
+## A number slider similar to that found in Godot Engine's inspector.
 
 ## Emitted when the user changes the value by sliding or by typing it in.
 signal changed
@@ -53,14 +53,15 @@ func _input(event : InputEvent) -> void:
 			value = _correct(remap(motion_ev.position.x,
 					global_position.x,
 					global_position.x + size.x, min_value, max_value))
-			text = str(value)
 			emit_signal("changed")
 		elif _dragging:
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+			# Disabled to support more input methods, mainly graphic tablets
+			# in absolute mode.
+#			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 			release_focus()
-			value += motion_ev.relative.x * ((max_value - min_value) / sensitivity) * _get_change_modifier()
+			value += motion_ev.relative.x * ((max_value - min_value)
+					/ sensitivity) * _get_change_modifier()
 			value = _correct(value)
-			text = str(value)
 			emit_signal("changed")
 		elif _mouse_near_grabber() and _clicked:
 			_grabbed = true
@@ -73,15 +74,14 @@ func _input(event : InputEvent) -> void:
 func _gui_input(event : InputEvent) -> void:
 	if event.is_action("ui_cancel"):
 		release_focus()
-		text = str(value)
 		mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 func _draw() -> void:
 	draw_rect(Rect2(Vector2(0, size.y), Vector2(size.x, 2)),
 			Color.DIM_GRAY)
-	if not _text_editing and (_dragging or _grabbed or Rect2(Vector2.ZERO, size + Vector2.DOWN * 10).has_point(
-				get_local_mouse_position())):
+	if not _text_editing and (_dragging or _grabbed or Rect2(Vector2.ZERO,
+			size + Vector2.DOWN * 10).has_point(get_local_mouse_position())):
 		var texture := preload("grabber.svg")
 		if _mouse_near_grabber() or _grabbed:
 			texture = preload("selected_grabber.svg")
@@ -90,6 +90,27 @@ func _draw() -> void:
 		var grabber_size := Vector2(4, 2)
 		draw_rect(Rect2(_get_grabber_pos() - Vector2.RIGHT * 2, grabber_size),
 				Color.WHITE)
+
+
+func _on_focus_entered() -> void:
+	_text_editing = true
+
+
+func _on_focus_exited():
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_text_editing = false
+
+
+func _on_text_changed(new_text : String) -> void:
+	if new_text.is_valid_float():
+		value = _correct(new_text.to_float())
+		emit_signal("changed")
+
+
+func _on_text_entered(new_text : String) -> void:
+	value = _correct(new_text.to_float())
+	release_focus()
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 func _get_change_modifier() -> float:
@@ -106,26 +127,3 @@ func _get_grabber_pos() -> Vector2:
 
 func _mouse_near_grabber() -> bool:
 	return get_local_mouse_position().distance_to(_get_grabber_pos()) < 10
-
-
-func _on_focus_entered() -> void:
-	_text_editing = true
-
-
-func _on_focus_exited():
-	text = str(value)
-	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_text_editing = false
-
-
-func _on_text_changed(new_text : String) -> void:
-	if new_text.is_valid_float():
-		value = _correct(new_text.to_float())
-		emit_signal("changed")
-
-
-func _on_text_entered(new_text : String) -> void:
-	value = _correct(new_text.to_float())
-	release_focus()
-	text = str(value)
-	mouse_filter = Control.MOUSE_FILTER_IGNORE
