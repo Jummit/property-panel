@@ -37,7 +37,6 @@ var _property_containers : Dictionary
 var _currently_choosing_path_for : PathPickerButton
 
 @onready var _file_dialog : FileDialog = %FileDialog
-@onready var _scroll_container : ScrollContainer = $ScrollContainer
 @onready var _properties_container: BoxContainer = %PropertiesContainer
 
 func _ready():
