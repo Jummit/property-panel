@@ -1,13 +1,14 @@
 class_name PropertyContainer
 extends HBoxContainer
 
-## An item in a `PropertyPanel`
+## An item in a [PropertyPanel].
+##
+## Contains a [member name_label] and the [member property_control] the
+## [member property] returns. Emits the [signal property_changed] signal when
+## the [member property_control] emitted the signal the [member property]
+## specified.
 
-## Contains a `name_label` and the `property_control` the `property` returns.
-## Emits the `property_changed` signal when the `property_control` emitted the
-## `changed_signal` the `property` specified.
-
-signal property_changed(value)
+signal property_changed(value: Variant)
 
 const Property = preload("../properties.gd").Property
 
@@ -23,19 +24,16 @@ func setup(_property) -> Control:
 	property_control.size_flags_horizontal = SIZE_EXPAND_FILL
 	property_control.size_flags_vertical = SIZE_EXPAND_FILL
 	property_control.custom_minimum_size.x = 60
-	property_control.set_drag_forwarding(func(): pass, _can_drop_data_fw, _drop_data_fw)
-	# This is a little hacky; since the argument count of signal callbacks have.
-	var args = 0
+	property_control.set_drag_forwarding(func(_pos): pass, _can_drop_data_fw, _drop_data_fw)
+	var arg_count := 0
 	for signal_info in property_control.get_signal_list():
 		if signal_info.name == property.changed_signal:
-			args = 2 - (signal_info.get("args") as Array).size()
+			arg_count = (signal_info.get("args") as Array).size()
 			break
-	if args == 0:
-		var __ := property_control.connect(property.changed_signal, _on_PropertyControl_changed)
-	elif args == 1:
-		var __ := property_control.connect(property.changed_signal, _on_PropertyControl_changed.bind(1))
-	elif args == 2:
-		var __ := property_control.connect(property.changed_signal, _on_PropertyControl_changed.bind(1, 1))
+	var args := []
+	var __ := args.resize(4 - arg_count)
+	__ = property_control.connect(property.changed_signal,
+			_on_PropertyControl_changed.bindv(args))
 	add_child(property_control)
 	return property_control
 
@@ -48,7 +46,7 @@ func set_value(to) -> void:
 	property._set_value(property_control, to)
 
 
-func _on_PropertyControl_changed(_a, _b):
+func _on_PropertyControl_changed(_a, _b, _c, _d):
 	property_changed.emit(get_value())
 
 

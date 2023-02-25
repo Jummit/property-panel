@@ -32,7 +32,6 @@ signal property_changed(property, value)
 ## bottom.
 @export var orientation := Orientation.VERTICAL
 
-const PropertyContainer := preload("property_container/property_container.gd")
 const Properties := preload("properties.gd")
 
 const PathPickerButton := preload("res://addons/property_panel/path_picker_button/path_picker_button.gd")

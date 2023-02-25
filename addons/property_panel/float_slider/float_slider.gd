@@ -8,16 +8,18 @@ signal changed
 ## The current number.
 @export var value : float:
 	set(to):
-		value = to
+		value = snapped(clamp(snapped(to, step), min_value, max_value), 0.001)
 		text = str(value)
 ## The mininum value allowed by sliding. Smaller numbers can be inputed manually.
 @export var min_value : float
 ## The maximum value allowed.
-@export var max_value : float = 10
+@export var max_value : float
 ## The number the value will be snapped to. Useful for integer inputs.
 @export var step : float
-## The sensitivity while sliding.
+## The sensitivity while dragging with the mouse to change the value.
 @export var sensitivity := 1000.0
+
+@onready var knob: Control = $Node/Knob
 
 ## If the user is dragging the text field.
 var _dragging := false
@@ -26,23 +28,29 @@ var _dragged_position : Vector2
 var _grabbed := false
 var _clicked := false
 var _text_editing := false
+var _initialy_clicked_position : Vector2
+
+const NOT_CLICKED := Vector2.ZERO
 
 func _input(event : InputEvent) -> void:
 	if not is_visible_in_tree():
 		return
-	if event is InputEventMouseMotion:
-		queue_redraw()
+	knob.global_position = global_position
 	var button_ev := event as InputEventMouseButton
 	var motion_ev := event as InputEventMouseMotion
 	if button_ev:
-		var in_rect := get_global_rect().has_point(button_ev.position)
+		var in_rect := knob.get_global_rect().has_point(button_ev.position)
+		if button_ev.pressed and _initialy_clicked_position == NOT_CLICKED:
+			_initialy_clicked_position = button_ev.position
+		elif not button_ev.pressed:
+			_initialy_clicked_position = NOT_CLICKED
 		if not button_ev.pressed:
 			if _grabbed:
 				_grabbed = false
 			elif _dragging:
 				_dragging = false
 				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-				warp_mouse.call_deferred(_dragged_position)
+#				warp_mouse.call_deferred(_dragged_position)
 			elif in_rect and _clicked:
 				mouse_filter = Control.MOUSE_FILTER_STOP
 				grab_focus()
@@ -50,11 +58,11 @@ func _input(event : InputEvent) -> void:
 	if motion_ev and motion_ev.button_mask == MOUSE_BUTTON_LEFT:
 		var in_rect := get_global_rect().has_point(motion_ev.position)
 		if _grabbed:
-			value = _correct(remap(motion_ev.position.x,
+			value = remap(motion_ev.position.x,
 					global_position.x,
-					global_position.x + size.x, min_value, max_value))
+					global_position.x + size.x, min_value, max_value)
 			@warning_ignore("return_value_discarded")
-			emit_signal("changed")
+			changed.emit()
 		elif _dragging:
 			# Disabled to support more input methods, mainly graphic tablets
 			# in absolute mode.
@@ -62,15 +70,15 @@ func _input(event : InputEvent) -> void:
 			release_focus()
 			value += motion_ev.relative.x * ((max_value - min_value)
 					/ sensitivity) * _get_change_modifier()
-			value = _correct(value)
 			@warning_ignore("return_value_discarded")
-			emit_signal("changed")
+			changed.emit()
 		elif _mouse_near_grabber() and _clicked:
 			_grabbed = true
-		elif in_rect and _clicked:
+		elif in_rect and _clicked and _initialy_clicked_position.distance_to(motion_ev.position) > 4:
 			_dragged_position = motion_ev.position - global_position
 			_dragging = true
 	queue_redraw()
+	knob.queue_redraw()
 
 
 func _gui_input(event : InputEvent) -> void:
@@ -82,16 +90,9 @@ func _gui_input(event : InputEvent) -> void:
 func _draw() -> void:
 	draw_rect(Rect2(Vector2(0, size.y), Vector2(size.x, 2)),
 			Color.DIM_GRAY)
-	if not _text_editing and (_dragging or _grabbed or Rect2(Vector2.ZERO,
-			size + Vector2.DOWN * 10).has_point(get_local_mouse_position())):
-		var texture := preload("grabber.svg")
-		if _mouse_near_grabber() or _grabbed:
-			texture = preload("selected_grabber.svg")
-		draw_texture(texture, _get_grabber_pos() - texture.get_size() / 2)
-	else:
-		var grabber_size := Vector2(4, 2)
-		draw_rect(Rect2(_get_grabber_pos() - Vector2.RIGHT * 2, grabber_size),
-				Color.WHITE)
+	var grabber_size := Vector2(4, 2)
+	draw_rect(Rect2(_get_grabber_pos() - Vector2.RIGHT * 2, grabber_size),
+			Color.WHITE)
 
 
 func _on_focus_entered() -> void:
@@ -106,7 +107,7 @@ func _on_focus_exited():
 func _on_text_changed(new_text : String) -> void:
 	if new_text.is_valid_float():
 		var last_carret := caret_column
-		value = _correct(new_text.to_float())
+		value = new_text.to_float()
 		# Avoid emitting [method _on_text_changed].
 		set_block_signals(true)
 		text = new_text
@@ -117,7 +118,7 @@ func _on_text_changed(new_text : String) -> void:
 
 
 func _on_text_entered(new_text : String) -> void:
-	value = _correct(new_text.to_float())
+	value = new_text.to_float()
 	release_focus()
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
@@ -126,13 +127,18 @@ func _get_change_modifier() -> float:
 	return .2 if Input.is_key_pressed(KEY_SHIFT) else 1.0
 
 
-func _correct(new_value : float) -> float:
-	return snapped(clamp(snapped(new_value, step), min_value, max_value), 0.001)
-
-
 func _get_grabber_pos() -> Vector2:
 	return Vector2(remap(value, min_value, max_value, 0, size.x), size.y)
 
 
 func _mouse_near_grabber() -> bool:
 	return get_local_mouse_position().distance_to(_get_grabber_pos()) < 10
+
+
+func _on_knob_draw() -> void:
+	if not _text_editing and (_dragging or _grabbed or Rect2(Vector2.ZERO,
+			size + Vector2.DOWN * 10).has_point(get_local_mouse_position())):
+		var texture := preload("grabber.svg")
+		if _mouse_near_grabber() or _grabbed:
+			texture = preload("selected_grabber.svg")
+		knob.draw_texture(texture, _get_grabber_pos() - texture.get_size() / 2)
