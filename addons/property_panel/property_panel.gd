@@ -83,13 +83,9 @@ func store_values(instance: Variant) -> void:
 		"Couldn't store values inside variant of type %s, expected Object or Dictionary" % typeof(instance))
 	for property in _property_containers:
 		var container := (_property_containers.get(property) as PropertyContainer)
-		var value = container.get_value()
-		var obj := instance as Object
-		var dict := instance as Dictionary
-		if obj:
-			obj.set(property, value)
-		elif dict:
-			dict[property] = value
+		var value : Variant = container.get_value()
+		@warning_ignore("unsafe_method_access")
+		instance.set(property, value)
 
 
 ## Load the property values from an [Object] or [Dictionary].
@@ -101,13 +97,8 @@ func load_values(instance: Variant) -> void:
 	for _container in _properties_container.get_children():
 		var container := _container as PropertyContainer
 		if container:
-			var obj := instance as Object
-			var dict := instance as Dictionary
-			var value : Variant
-			if obj:
-				value = obj.get(container.property.name)
-			elif dict:
-				value = dict.get(container.property.name)
+			@warning_ignore("unsafe_method_access")
+			var value : Variant = instance.get(container.property.name)
 			if value != null:
 				container.set_value(value)
 	set_block_signals(false)
