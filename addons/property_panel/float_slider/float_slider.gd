@@ -105,6 +105,7 @@ func _on_focus_entered() -> void:
 func _on_focus_exited():
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_text_editing = false
+	text = str(value)
 
 
 func _on_text_changed(new_text : String) -> void:
