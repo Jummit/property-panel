@@ -75,7 +75,7 @@ func _input(event : InputEvent) -> void:
 					/ sensitivity) * _get_change_modifier()
 			@warning_ignore("return_value_discarded")
 			changed.emit()
-		elif _mouse_near_grabber() and _clicked:
+		elif _mouse_near_grabber() and _clicked and not _text_editing:
 			_grabbed = true
 		elif in_rect and _clicked and _initialy_clicked_position.distance_to(motion_ev.position) > 4:
 			_dragged_position = motion_ev.position - global_position
