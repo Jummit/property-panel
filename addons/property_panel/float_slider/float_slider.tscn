@@ -15,13 +15,7 @@ min_value = 0.211
 [node name="Knob" type="Control" parent="Node"]
 z_index = 1
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 12.9375
-offset_bottom = 14.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
 mouse_filter = 2
 
 [connection signal="focus_entered" from="." to="." method="_on_focus_entered"]

@@ -36,10 +36,11 @@ func _input(event : InputEvent) -> void:
 	if not is_visible_in_tree():
 		return
 	knob.global_position = global_position
+	knob.set_deferred("size", size)
 	var button_ev := event as InputEventMouseButton
 	var motion_ev := event as InputEventMouseMotion
 	if button_ev:
-		var in_rect := knob.get_global_rect().has_point(button_ev.position)
+		var in_rect := knob.get_global_rect().grow(10).has_point(button_ev.position)
 		if button_ev.pressed and _initialy_clicked_position == NOT_CLICKED:
 			_initialy_clicked_position = button_ev.position
 		elif not button_ev.pressed:
