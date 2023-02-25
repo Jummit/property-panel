@@ -14,6 +14,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="PropertiesContainer" type="BoxContainer" parent="ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="FileDialog" type="FileDialog" parent="."]
 unique_name_in_owner = true
 title = "Open a File"

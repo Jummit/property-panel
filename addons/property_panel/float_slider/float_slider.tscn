@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://addons/property_panel/float_slider/float_slider.gd" id="1"]
 
 [node name="FloatSlider" type="LineEdit"]
-offset_right = 58.0
-offset_bottom = 24.0
+offset_right = 67.0625
+offset_bottom = 31.0
 mouse_filter = 2
 script = ExtResource("1")
 value = 0.051

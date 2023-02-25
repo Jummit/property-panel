@@ -42,7 +42,7 @@ func _input(event : InputEvent) -> void:
 	var button_ev := event as InputEventMouseButton
 	var motion_ev := event as InputEventMouseMotion
 	if button_ev:
-		var in_rect := get_global_rect().grow(10).has_point(button_ev.position)
+		var in_rect := get_global_rect().grow_side(3, 3).has_point(button_ev.position)
 		if button_ev.pressed and _initialy_clicked_position == NOT_CLICKED:
 			_initialy_clicked_position = button_ev.position
 		elif not button_ev.pressed:
@@ -91,7 +91,7 @@ func _gui_input(event : InputEvent) -> void:
 
 
 func _draw() -> void:
-	draw_rect(Rect2(Vector2(0, size.y), Vector2(size.x, 2)),
+	draw_rect(Rect2(Vector2(0, size.y - 2), Vector2(size.x, 2)),
 			Color.DIM_GRAY)
 	var grabber_size := Vector2(4, 2)
 	draw_rect(Rect2(_get_grabber_pos() - Vector2.RIGHT * 2, grabber_size),
@@ -131,7 +131,7 @@ func _get_change_modifier() -> float:
 
 
 func _get_grabber_pos() -> Vector2:
-	return Vector2(remap(value, min_value, max_value, 0, size.x), size.y)
+	return Vector2(remap(value, min_value, max_value, 0, size.x), size.y - 2)
 
 
 func _mouse_near_grabber() -> bool:

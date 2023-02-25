@@ -21,36 +21,29 @@ class_name PropertyPanel
 ## ])
 ## [/codeblock]
 
-enum Orientation {
-	VERTICAL,
-	HORIZONTAL,
-}
-
 signal property_changed(property, value)
 
 ## Whether the properties should be alligned from left to right or from top to
 ## bottom.
-@export var orientation := Orientation.VERTICAL
+@export var vertical := true
 
 const Properties := preload("properties.gd")
 
 const PathPickerButton := preload("res://addons/property_panel/path_picker_button/path_picker_button.gd")
+
 var _property_container_scene := preload("property_container/property_container.tscn")
 ## Each editable member's [PropertyContainer].
 var _property_containers : Dictionary
 var _currently_choosing_path_for : PathPickerButton
 
 @onready var _file_dialog : FileDialog = %FileDialog
-@onready var _properties_container : Container
 @onready var _scroll_container : ScrollContainer = $ScrollContainer
+@onready var _properties_container: BoxContainer = %PropertiesContainer
 
 func _ready():
-	@warning_ignore("incompatible_ternary")
-	_properties_container = HBoxContainer.new() if\
-			orientation == Orientation.HORIZONTAL else VBoxContainer.new()
+	_properties_container.vertical = vertical
 	_properties_container.size_flags_horizontal = SIZE_EXPAND_FILL
 	_properties_container.size_flags_vertical = SIZE_EXPAND_FILL
-	_scroll_container.add_child(_properties_container)
 
 
 func get_value(property : String):
