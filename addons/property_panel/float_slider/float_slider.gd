@@ -19,7 +19,7 @@ signal changed
 ## The sensitivity while dragging with the mouse to change the value.
 @export var sensitivity := 1000.0
 
-@onready var knob: Control = $Node/Knob
+@onready var knob: Control = %Knob
 
 ## If the user is dragging the text field.
 var _dragging := false
@@ -35,12 +35,14 @@ const NOT_CLICKED := Vector2.ZERO
 func _input(event : InputEvent) -> void:
 	if not is_visible_in_tree():
 		return
-	knob.global_position = global_position
-	knob.set_deferred("size", size)
+	if _dragging:
+		knob.mouse_filter = Control.MOUSE_FILTER_STOP
+	else:
+		knob.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var button_ev := event as InputEventMouseButton
 	var motion_ev := event as InputEventMouseMotion
 	if button_ev:
-		var in_rect := knob.get_global_rect().grow(10).has_point(button_ev.position)
+		var in_rect := get_global_rect().grow(10).has_point(button_ev.position)
 		if button_ev.pressed and _initialy_clicked_position == NOT_CLICKED:
 			_initialy_clicked_position = button_ev.position
 		elif not button_ev.pressed:
@@ -142,4 +144,5 @@ func _on_knob_draw() -> void:
 		var texture := preload("grabber.svg")
 		if _mouse_near_grabber() or _grabbed:
 			texture = preload("selected_grabber.svg")
-		knob.draw_texture(texture, _get_grabber_pos() - texture.get_size() / 2)
+		knob.draw_texture(texture,
+				global_position + _get_grabber_pos() - texture.get_size() / 2)
