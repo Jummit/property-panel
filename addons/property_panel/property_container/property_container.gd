@@ -28,14 +28,14 @@ func setup(_property) -> Control:
 	var args = 0
 	for signal_info in property_control.get_signal_list():
 		if signal_info.name == property.changed_signal:
-			args = 2 - (signal_info.args as Array).size()
+			args = 2 - (signal_info.get("args") as Array).size()
 			break
 	if args == 0:
-		property_control.connect(property.changed_signal, _on_PropertyControl_changed)
+		var __ := property_control.connect(property.changed_signal, _on_PropertyControl_changed)
 	elif args == 1:
-		property_control.connect(property.changed_signal, _on_PropertyControl_changed.bind(1))
+		var __ := property_control.connect(property.changed_signal, _on_PropertyControl_changed.bind(1))
 	elif args == 2:
-		property_control.connect(property.changed_signal, _on_PropertyControl_changed.bind(1, 1))
+		var __ := property_control.connect(property.changed_signal, _on_PropertyControl_changed.bind(1, 1))
 	add_child(property_control)
 	return property_control
 
@@ -49,7 +49,7 @@ func set_value(to) -> void:
 
 
 func _on_PropertyControl_changed(_a, _b):
-	emit_signal("property_changed", get_value())
+	property_changed.emit(get_value())
 
 
 func _can_drop_data_fw(_position : Vector2, data, _control : Control) -> bool:
@@ -58,4 +58,4 @@ func _can_drop_data_fw(_position : Vector2, data, _control : Control) -> bool:
 
 func _drop_data_fw(_position : Vector2, data, _control : Control) -> void:
 	property._drop_data(property_control, data)
-	emit_signal("property_changed", get_value())
+	property_changed.emit(get_value())

@@ -3,13 +3,15 @@
 ## Each property can create a `Control` and specifies the signal it emits when it
 ## changed. It also specifies which member of the control is the resulting value.
 
+const PathPickerButton = preload("res://addons/property_panel/path_picker_button/path_picker_button.gd")
+
 class Property:
 	var name : String
 	var changed_signal : String
 	var property_variable : String
 	var default
 	
-	func _init(_changed_signal : String,_property_variable : String,_name : String,_default):
+	func _init(_changed_signal : String,_property_variable : String,_name : String,_default) -> void:
 		changed_signal = _changed_signal
 		property_variable = _property_variable
 		name = _name
@@ -40,6 +42,7 @@ class EnumProperty extends Property:
 	var choices : PackedStringArray
 	
 	func _init(_name,_choices,_default = null):
+		@warning_ignore("return_value_discarded")
 		super("item_selected", "", _name, _default)
 		choices = _choices
 		default = _default
@@ -64,6 +67,7 @@ class EnumProperty extends Property:
 
 class StringProperty extends Property:
 	func _init(_name : String,_default := ""):
+		@warning_ignore("return_value_discarded")
 		super("text_changed", "text", _name, _default)
 	
 	func _get_control() -> Control:
@@ -72,6 +76,7 @@ class StringProperty extends Property:
 
 class BoolProperty extends Property:
 	func _init(_name,_default := false):
+		@warning_ignore("return_value_discarded")
 		super("toggled", "button_pressed", _name, _default)
 	
 	func _get_control() -> Control:
@@ -86,6 +91,7 @@ class RangeProperty extends Property:
 	const FloatSlider = preload("float_slider/float_slider.gd")
 	
 	func _init(_name,_default,_step):
+		@warning_ignore("return_value_discarded")
 		super("changed", "value", _name, _default)
 		_step = step
 	
@@ -100,6 +106,7 @@ class RangeProperty extends Property:
 
 class IntProperty extends RangeProperty:
 	func _init(_name,_from,_to,_default = _from):
+		@warning_ignore("return_value_discarded")
 		super(_name, 1, _default)
 		from = _from
 		to = _to
@@ -107,6 +114,7 @@ class IntProperty extends RangeProperty:
 
 class FloatProperty extends RangeProperty:
 	func _init(_name,_from=0.0,_to=1.0,_default = _from):
+		@warning_ignore("return_value_discarded")
 		super(_name, 0.01, _default)
 		from = _from
 		to = _to
@@ -114,6 +122,7 @@ class FloatProperty extends RangeProperty:
 
 class ColorProperty extends Property:
 	func _init(_name,_default := Color.WHITE):
+		@warning_ignore("return_value_discarded")
 		super("color_changed", "color", _name, _default)
 	
 	func _get_control() -> Control:
@@ -121,10 +130,16 @@ class ColorProperty extends Property:
 
 
 class FilePathProperty extends Property:
-	func _init(_name : String,_default := ""):
+	var filters: PackedStringArray
+	
+	func _init(_name : String, _default := "",
+			_filters : PackedStringArray = []):
+		@warning_ignore("return_value_discarded")
 		super("changed", "path", _name, _default)
-		pass
+		_filters = filters
 	
 	func _get_control() -> Control:
-		return preload("path_picker_button/path_picker_button.tscn").instantiate()\
-				as Control
+		var button : PathPickerButton = preload(
+				"path_picker_button/path_picker_button.tscn").instantiate()
+		button.filters = filters
+		return button

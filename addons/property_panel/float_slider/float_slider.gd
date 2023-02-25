@@ -53,6 +53,7 @@ func _input(event : InputEvent) -> void:
 			value = _correct(remap(motion_ev.position.x,
 					global_position.x,
 					global_position.x + size.x, min_value, max_value))
+			@warning_ignore("return_value_discarded")
 			emit_signal("changed")
 		elif _dragging:
 			# Disabled to support more input methods, mainly graphic tablets
@@ -62,6 +63,7 @@ func _input(event : InputEvent) -> void:
 			value += motion_ev.relative.x * ((max_value - min_value)
 					/ sensitivity) * _get_change_modifier()
 			value = _correct(value)
+			@warning_ignore("return_value_discarded")
 			emit_signal("changed")
 		elif _mouse_near_grabber() and _clicked:
 			_grabbed = true
@@ -110,6 +112,7 @@ func _on_text_changed(new_text : String) -> void:
 		text = new_text
 		set_block_signals(false)
 		caret_column = last_carret
+		@warning_ignore("return_value_discarded")
 		emit_signal("changed")
 
 
