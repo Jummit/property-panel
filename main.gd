@@ -18,7 +18,7 @@ func _ready() -> void:
 		Properties.BoolProperty.new("visible", true),
 		Properties.FloatProperty.new("rotation_degrees", 1, 360),
 		Properties.ColorProperty.new("modulate"),
-		Properties.BoolProperty.new("flip_v"),
+		Properties.BoolProperty.new("flip_h"),
 	])
 
 
