@@ -1,7 +1,35 @@
 ## Properties used to edit values in a [PropertyPanel].
-
+##
 ## Each property can create a `Control` and specifies the signal it emits when it
 ## changed. It also specifies which member of the control is the resulting value.
+## 
+## [br][br][b]Creating a Custom Property[/b]
+## [codeblock]
+## const Property = preload("res://addons/property_panel/properties.gd").Property
+## class VectorProperty extends Property:
+##   func _init(_name : String, _default := Vector2()):
+##     super("changed", "value", _name, _default)
+##
+##   func _get_control() -> Control:
+##     return VectorEdit.new()
+## [/codeblock][br]
+## [code]vector_edit.gd[/code]:
+## [codeblock]
+## extends Control
+## signal changed
+## 
+## var value = Vector2.ZERO
+## 
+## func _gui_input(event):
+##   value = Vector2(1, 1)
+##   changed.emit()
+## [/codeblock][br]
+## Usage:
+## [codeblock]
+## property_panel.set_properties([
+##   VectorProperty.new("motion")
+## ])
+## [/codeblock]
 
 const PathPickerButton = preload("res://addons/property_panel/path_picker_button/path_picker_button.gd")
 
