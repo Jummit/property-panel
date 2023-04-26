@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://addons/property_panel/property_panel.gd" id="1"]
 
 [node name="PropertyPanel" type="Panel"]
+custom_minimum_size = Vector2(0, 40)
 offset_right = 215.0
 offset_bottom = 371.0
 script = ExtResource("1")
