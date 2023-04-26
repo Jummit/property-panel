@@ -19,34 +19,34 @@ signal changed
 ## The sensitivity while dragging with the mouse to change the value.
 @export var sensitivity := 1000.0
 
-@onready var knob: Control = %Knob
+@onready var _knob: Control = %Knob
 
-## If the user is dragging the text field.
+## Wether the user is dragging the text field.
 var _dragging := false
 var _dragged_position : Vector2
-## If the user has grabbed the slider grabber.
+## Wether the user has grabbed the slider grabber.
 var _grabbed := false
 var _clicked := false
 var _text_editing := false
 var _initialy_clicked_position : Vector2
 
-const NOT_CLICKED := Vector2.ZERO
+const _NOT_CLICKED = Vector2.ZERO
 
 func _input(event : InputEvent) -> void:
 	if not is_visible_in_tree():
 		return
 	if _dragging:
-		knob.mouse_filter = Control.MOUSE_FILTER_STOP
+		_knob.mouse_filter = Control.MOUSE_FILTER_STOP
 	else:
-		knob.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_knob.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var button_ev := event as InputEventMouseButton
 	var motion_ev := event as InputEventMouseMotion
 	if button_ev:
 		var in_rect := get_global_rect().grow_side(3, 3).has_point(button_ev.position)
-		if button_ev.pressed and _initialy_clicked_position == NOT_CLICKED:
+		if button_ev.pressed and _initialy_clicked_position == _NOT_CLICKED:
 			_initialy_clicked_position = button_ev.position
 		elif not button_ev.pressed:
-			_initialy_clicked_position = NOT_CLICKED
+			_initialy_clicked_position = _NOT_CLICKED
 		if not button_ev.pressed:
 			if _grabbed:
 				_grabbed = false
@@ -81,7 +81,7 @@ func _input(event : InputEvent) -> void:
 			_dragged_position = motion_ev.position - global_position
 			_dragging = true
 	queue_redraw()
-	knob.queue_redraw()
+	_knob.queue_redraw()
 
 
 func _gui_input(event : InputEvent) -> void:
@@ -145,5 +145,5 @@ func _on_knob_draw() -> void:
 		var texture := preload("grabber.svg")
 		if _mouse_near_grabber() or _grabbed:
 			texture = preload("selected_grabber.svg")
-		knob.draw_texture(texture,
+		_knob.draw_texture(texture,
 				global_position + _get_grabber_pos() - texture.get_size() / 2)

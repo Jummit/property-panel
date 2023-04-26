@@ -1,6 +1,6 @@
 ## Properties used to edit values in a [PropertyPanel].
 ##
-## Each property can create a `Control` and specifies the signal it emits when it
+## Each property can create a [Control] and specifies the signal it emits when it
 ## changed. It also specifies which member of the control is the resulting value.
 ## 
 ## [br][br][b]Creating a Custom Property[/b]
@@ -31,15 +31,18 @@
 ## ])
 ## [/codeblock]
 
-const PathPickerButton = preload("res://addons/property_panel/path_picker_button/path_picker_button.gd")
+const _PathPickerButton = preload("res://addons/property_panel/path_picker_button/path_picker_button.gd")
 
 class Property:
+	## Property base class.
+	
 	var name : String
 	var changed_signal : String
 	var property_variable : String
 	var default
 	
-	func _init(_changed_signal : String,_property_variable : String,_name : String,_default) -> void:
+	func _init(_changed_signal : String,_property_variable : String,
+			_name : String, _default) -> void:
 		changed_signal = _changed_signal
 		property_variable = _property_variable
 		name = _name
@@ -167,7 +170,7 @@ class FilePathProperty extends Property:
 		_filters = filters
 	
 	func _get_control() -> Control:
-		var button : PathPickerButton = preload(
+		var button : _PathPickerButton = preload(
 				"path_picker_button/path_picker_button.tscn").instantiate()
 		button.filters = filters
 		return button

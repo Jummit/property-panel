@@ -25,30 +25,31 @@ signal property_changed(property, value)
 
 ## Whether the properties should be alligned from left to right or from top to
 ## bottom.
-@export var vertical := true
+@export var vertical := true:
+	set(to):
+		vertical = to
+		if not is_inside_tree():
+			await ready
+		_properties_container.vertical = vertical
 
-const Properties := preload("properties.gd")
-
-const PathPickerButton := preload("res://addons/property_panel/path_picker_button/path_picker_button.gd")
+const _Property = preload("properties.gd").Property
+const _PathPickerButton = preload("path_picker_button/path_picker_button.gd")
 
 var _property_container_scene := preload("property_container/property_container.tscn")
 ## Each editable member's [PropertyContainer].
 var _property_containers : Dictionary
-var _currently_choosing_path_for : PathPickerButton
+var _currently_choosing_path_for : _PathPickerButton
 
 @onready var _file_dialog : FileDialog = %FileDialog
 @onready var _properties_container: BoxContainer = %PropertiesContainer
 
-func _ready():
-	_properties_container.vertical = vertical
-	_properties_container.size_flags_horizontal = SIZE_EXPAND_FILL
-	_properties_container.size_flags_vertical = SIZE_EXPAND_FILL
 
-
+## Returns the current value of a property control.
 func get_value(property : String):
 	return (_property_containers.get(property) as PropertyContainer).get_value()
 
 
+## Set the current value of a property control.
 func set_value(property : String, value):
 	(_property_containers.get(property) as PropertyContainer).set_value(value)
 
@@ -58,7 +59,7 @@ func has_property(property : String) -> bool:
 	return property in _property_containers
 
 
-## Returns a `Dictionary` with the property names as keys and the values as
+## Returns a [Dictionary] with the property names as keys and the values as
 ## values.
 func get_values() -> Dictionary:
 	var values := {}
@@ -68,10 +69,10 @@ func get_values() -> Dictionary:
 	return values
 
 
-## Store the property/value pairs in an [Object] or [Dictionary].
+## Store the property/value pairs in an [Object] or [Dictionary].*
 func store_values(instance: Variant) -> void:
 	assert(instance is Object or instance is Dictionary,
-		"Couldn't store values inside variant of type %s, expected Object or Dictionary" % typeof(instance))
+			"Couldn't store values inside variant of type %s, expected Object or Dictionary" % typeof(instance))
 	for property in _property_containers:
 		var container := (_property_containers.get(property) as PropertyContainer)
 		var value : Variant = container.get_value()
@@ -109,17 +110,23 @@ func set_properties(properties : Array) -> void:
 			label.text = property
 			_properties_container.add_child(label)
 		else:
-			var container : PropertyContainer = _property_container_scene.instantiate()
-			container.name = property.name
-			var __ := container.property_changed.connect(_on_Property_changed.bind(container))
-			
-			_property_containers[property.name] = container
-			_properties_container.add_child(container)
-			var control : Control = container.setup(property)
-			var picker_button := control as PathPickerButton
-			if picker_button:
-				__ = picker_button.dialog_opened.connect(
-						_on_path_picker_button_dialog_opened.bind(control))
+			_add_property_containery(property)
+
+
+func _add_property_containery(property: _Property) -> void:
+	var container : PropertyContainer = _property_container_scene.instantiate()
+	container.name = property.name
+	@warning_ignore("return_value_discarded")
+	container.property_changed.connect(_on_Property_changed.bind(container))
+	
+	_property_containers[property.name] = container
+	_properties_container.add_child(container)
+	var control : Control = container.setup(property)
+	var picker_button := control as _PathPickerButton
+	if picker_button:
+		@warning_ignore("return_value_discarded")
+		picker_button.pressed.connect(
+				_on_path_picker_button_dialog_opened.bind(control))
 
 
 ## Clears the panel, removing every property and section title.
@@ -131,14 +138,14 @@ func _on_Property_changed(value, container : PropertyContainer):
 	property_changed.emit(container.property.name, value)
 
 
-func _on_path_picker_button_dialog_opened(path_picker: PathPickerButton):
+func _on_path_picker_button_dialog_opened(path_picker: _PathPickerButton):
 	_file_dialog.popup_centered_ratio(0.4)
 	_file_dialog.filters = path_picker.filters
 	_currently_choosing_path_for = path_picker
 
 
 func _on_file_dialog_file_selected(path: String):
-	_currently_choosing_path_for.select_path(path)
+	_currently_choosing_path_for.path = path
 
 
 func _on_file_dialog_close_requested() -> void:

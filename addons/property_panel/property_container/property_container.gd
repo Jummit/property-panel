@@ -10,9 +10,9 @@ extends HBoxContainer
 
 signal property_changed(value: Variant)
 
-const Property = preload("../properties.gd").Property
+const _Property = preload("../properties.gd").Property
 
-var property: Property
+var property: _Property
 var property_control : Control
 
 @onready var name_label : Label = $Name
@@ -31,8 +31,10 @@ func setup(_property) -> Control:
 			arg_count = (signal_info.get("args") as Array).size()
 			break
 	var args := []
-	var __ := args.resize(4 - arg_count)
-	__ = property_control.connect(property.changed_signal,
+	@warning_ignore("return_value_discarded")
+	args.resize(4 - arg_count)
+	@warning_ignore("return_value_discarded")
+	property_control.connect(property.changed_signal,
 			_on_PropertyControl_changed.bindv(args))
 	add_child(property_control)
 	return property_control

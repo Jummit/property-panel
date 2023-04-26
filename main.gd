@@ -24,5 +24,6 @@ func _ready() -> void:
 	])
 
 
-func _on_MiddlePropertyPanel_property_changed(property, value) -> void:
+func _on_MiddlePropertyPanel_property_changed(property: String,
+		value: Variant) -> void:
 	editable_texture[property] = value

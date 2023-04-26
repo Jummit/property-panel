@@ -29,7 +29,7 @@ gdscript/warnings/unused_class_variable=true
 
 [editor_plugins]
 
-enabled=PackedStringArray()
+enabled=PackedStringArray("res://addons/propertypanel/plugin.cfg", "res://addons/property_panel/plugin.cfg")
 
 [physics]
 
