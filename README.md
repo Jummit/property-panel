@@ -12,11 +12,15 @@ A panel similar to the Inspector inside the Godot Engine. Can be used to expose 
 * Exposing file paths which open a file dialog when clicking them
 * Custom properties (see `properties.gd` for a tutorial)
 
-**Screenshot:**
+## Installation
+
+Download a [release](https://github.com/Jummit/property-panel/releases) and put it into your addon folder. Enabling the addon is not necessary as of now.
+
+## Screenshots
 
 ![screenshot](screenshots/screenshot.png)
 
-**Example Code:**
+## Example Code
 
 In this example a sprite's values are exposed in a property panel.
 
