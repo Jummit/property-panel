@@ -1,4 +1,4 @@
-# Property Panel Addon
+# Property Panel Addon ![Godot v4.0.2](https://img.shields.io/badge/Godot-v4.0.2-%23478cbf) ![GitHub](https://img.shields.io/github/license/Jummit/property-panel)
 
 A panel similar to the Inspector inside the Godot Engine. Can be used to expose various values inside tools / games.
 
