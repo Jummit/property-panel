@@ -20,6 +20,10 @@ Download a [release](https://github.com/Jummit/property-panel/releases) and put 
 
 ![screenshot](screenshots/screenshot.png)
 
+## Usage
+
+Add a `PropertyPanel` to your scene.
+
 ## Example Code
 
 In this example a sprite's values are exposed in a property panel.

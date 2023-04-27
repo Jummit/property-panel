@@ -40,8 +40,14 @@ var _property_container_scene := preload("property_container/property_container.
 var _property_containers : Dictionary
 var _currently_choosing_path_for : _PathPickerButton
 
-@onready var _file_dialog : FileDialog = %FileDialog
-@onready var _properties_container: BoxContainer = %PropertiesContainer
+var _file_dialog := FileDialog.new()
+var _properties_container := BoxContainer.new()
+
+
+func _ready() -> void:
+	_setup_internal_nodes()
+	# Avoid scrollbar when the layout is vertical.
+	custom_minimum_size.y = 40
 
 
 ## Returns the current value of a property control.
@@ -111,6 +117,29 @@ func set_properties(properties : Array) -> void:
 			_properties_container.add_child(label)
 		else:
 			_add_property_containery(property)
+
+
+func _setup_internal_nodes() -> void:
+	# TODO: These should be configurable from path picker buttons as well.
+	_file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	_file_dialog.access = FileDialog.ACCESS_FILESYSTEM
+	@warning_ignore("return_value_discarded")
+	_file_dialog.file_selected.connect(_on_file_dialog_file_selected)
+	@warning_ignore("return_value_discarded")
+	_file_dialog.close_requested.connect(_on_file_dialog_close_requested)
+	add_child(_file_dialog)
+	var scroll_container := ScrollContainer.new()
+	_properties_container.vertical = vertical
+	scroll_container.add_child(_properties_container)
+	scroll_container.anchor_right = 1
+	scroll_container.anchor_bottom = 1
+	scroll_container.offset_left = 5
+	scroll_container.offset_top = 5
+	scroll_container.offset_right = -5
+	scroll_container.offset_bottom = -5
+	scroll_container.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	scroll_container.grow_vertical = Control.GROW_DIRECTION_BOTH
+	add_child(scroll_container)
 
 
 func _add_property_containery(property: _Property) -> void:
