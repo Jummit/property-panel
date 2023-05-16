@@ -124,7 +124,7 @@ class RangeProperty extends Property:
 	func _init(_name,_default,_step):
 		@warning_ignore("return_value_discarded")
 		super("changed", "value", _name, _default)
-		_step = step
+		step = _step
 	
 	func _get_control() -> Control:
 		var slider : FloatSlider = preload(
@@ -136,17 +136,17 @@ class RangeProperty extends Property:
 
 
 class IntProperty extends RangeProperty:
-	func _init(_name,_from,_to,_default = _from):
+	func _init(_name,_from=0,_to=100,_default = _from,_step = _from):
 		@warning_ignore("return_value_discarded")
-		super(_name, 1, _default)
+		super(_name, _default, _step)
 		from = _from
 		to = _to
 
 
 class FloatProperty extends RangeProperty:
-	func _init(_name,_from=0.0,_to=1.0,_default = _from):
+	func _init(_name,_from=0.0,_to=1.0,_default = _from,_step = _from):
 		@warning_ignore("return_value_discarded")
-		super(_name, 0.01, _default)
+		super(_name, _default, _step)
 		from = _from
 		to = _to
 
