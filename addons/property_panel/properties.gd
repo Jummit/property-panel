@@ -161,7 +161,7 @@ class ColorProperty extends Property:
 
 
 class FilePathProperty extends Property:
-	var option: Dictionary
+	var options: Dictionary
 
 	func _init(_name : String, _default := "",
 			_options := {}):
