@@ -161,16 +161,16 @@ class ColorProperty extends Property:
 
 
 class FilePathProperty extends Property:
-	var filters: PackedStringArray
-	
+	var option: Dictionary
+
 	func _init(_name : String, _default := "",
-			_filters : PackedStringArray = []):
+			_option := {}):
 		@warning_ignore("return_value_discarded")
 		super("changed", "path", _name, _default)
-		filters = _filters
-	
+		option = _option
+
 	func _get_control() -> Control:
 		var button : _PathPickerButton = preload(
 				"path_picker_button/path_picker_button.tscn").instantiate()
-		button.filters = filters
+		button.option = option
 		return button
