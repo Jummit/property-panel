@@ -164,13 +164,13 @@ class FilePathProperty extends Property:
 	var option: Dictionary
 
 	func _init(_name : String, _default := "",
-			_option := {}):
+			_options := {}):
 		@warning_ignore("return_value_discarded")
 		super("changed", "path", _name, _default)
-		option = _option
+		options = _options
 
 	func _get_control() -> Control:
 		var button : _PathPickerButton = preload(
 				"path_picker_button/path_picker_button.tscn").instantiate()
-		button.option = option
+		button.options = options
 		return button
