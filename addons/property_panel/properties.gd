@@ -167,7 +167,7 @@ class FilePathProperty extends Property:
 			_filters : PackedStringArray = []):
 		@warning_ignore("return_value_discarded")
 		super("changed", "path", _name, _default)
-		_filters = filters
+		filters = _filters
 	
 	func _get_control() -> Control:
 		var button : _PathPickerButton = preload(
