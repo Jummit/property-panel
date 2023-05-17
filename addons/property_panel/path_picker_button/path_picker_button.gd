@@ -16,7 +16,7 @@ var path : String:
 		@warning_ignore("return_value_discarded")
 		emit_signal("changed")
 ## See [member FileDialog.filters].
-var filters : PackedStringArray
+var option : Dictionary
 
 func _gui_input(event : InputEvent) -> void:
 	var button_ev = event as InputEventMouseButton
