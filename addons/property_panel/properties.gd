@@ -136,7 +136,7 @@ class RangeProperty extends Property:
 
 
 class IntProperty extends RangeProperty:
-	func _init(_name,_from=0,_to=100,_default = _from,_step = _from):
+	func _init(_name,_from=0,_to=100,_default = _from,_step = 1):
 		@warning_ignore("return_value_discarded")
 		super(_name, _default, _step)
 		from = _from
@@ -144,7 +144,7 @@ class IntProperty extends RangeProperty:
 
 
 class FloatProperty extends RangeProperty:
-	func _init(_name,_from=0.0,_to=1.0,_default = _from,_step = _from):
+	func _init(_name,_from=0.0,_to=1.0,_default = _from,_step = 0.01):
 		@warning_ignore("return_value_discarded")
 		super(_name, _default, _step)
 		from = _from
