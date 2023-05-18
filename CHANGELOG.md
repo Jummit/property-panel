@@ -9,11 +9,11 @@
 ### Fixes
 
 - Custom minimum size of the property panel will now be kept if it's big enough.
-- Fix property constructors not setting values
+- Fix property constructors not setting values.
 
 ### Added
 
-- Allow configuring step of `FloatProperty`.
+- Allow configuring step of `FloatProperty` and `IntProperty`.
 - Default values for number property constructors.
 
 ## Version 2.0
