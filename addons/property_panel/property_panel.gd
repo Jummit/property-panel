@@ -133,7 +133,6 @@ func _setup_internal_nodes() -> void:
 	_properties_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_properties_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll_container.add_child(_properties_container)
-	scroll_container.clip_contents = false
 	scroll_container.anchor_right = 1
 	scroll_container.anchor_bottom = 1
 	scroll_container.offset_left = 5
