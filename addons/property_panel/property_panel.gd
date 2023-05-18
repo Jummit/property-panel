@@ -130,7 +130,8 @@ func _setup_internal_nodes() -> void:
 	add_child(_file_dialog)
 	var scroll_container := ScrollContainer.new()
 	_properties_container.vertical = vertical
-	_properties_container.size_flags_horizontal = 3
+	_properties_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_properties_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll_container.add_child(_properties_container)
 	scroll_container.clip_contents = false
 	scroll_container.anchor_right = 1
