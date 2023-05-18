@@ -128,6 +128,8 @@ func _setup_internal_nodes() -> void:
 	@warning_ignore("return_value_discarded")
 	_file_dialog.close_requested.connect(_on_file_dialog_close_requested)
 	add_child(_file_dialog)
+	var style_box := StyleBoxEmpty.new()
+	style_box.set_content_margin_all(5)
 	var scroll_container := ScrollContainer.new()
 	_properties_container.vertical = vertical
 	_properties_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -135,12 +137,9 @@ func _setup_internal_nodes() -> void:
 	scroll_container.add_child(_properties_container)
 	scroll_container.anchor_right = 1
 	scroll_container.anchor_bottom = 1
-	scroll_container.offset_left = 5
-	scroll_container.offset_top = 5
-	scroll_container.offset_right = -5
-	scroll_container.offset_bottom = -5
 	scroll_container.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	scroll_container.grow_vertical = Control.GROW_DIRECTION_BOTH
+	scroll_container.add_theme_stylebox_override("panel", style_box)
 	add_child(scroll_container)
 
 
