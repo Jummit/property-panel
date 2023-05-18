@@ -15,7 +15,7 @@ var path : String:
 		tooltip_text = path
 		@warning_ignore("return_value_discarded")
 		emit_signal("changed")
-## See [member FileDialog.filters].
+## Members and their values set on new [FileDialog]s.
 var options : Dictionary
 
 func _gui_input(event : InputEvent) -> void:
