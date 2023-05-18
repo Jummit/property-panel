@@ -7,7 +7,7 @@
 ## [codeblock]
 ## const Property = preload("res://addons/property_panel/properties.gd").Property
 ## class VectorProperty extends Property:
-##   func _init(_name : String, _default := Vector2()):
+##   func _init(_name : String, _default := Vector2()) -> void:
 ##     super("changed", "value", _name, _default)
 ##
 ##   func _get_control() -> Control:
@@ -41,8 +41,8 @@ class Property:
 	var property_variable : String
 	var default
 	
-	func _init(_changed_signal : String,_property_variable : String,
-			_name : String, _default) -> void:
+	func _init(_changed_signal : String, _property_variable : String,
+			_name : String, _default : Variant) -> void:
 		changed_signal = _changed_signal
 		property_variable = _property_variable
 		name = _name
@@ -70,9 +70,9 @@ class Property:
 
 
 class EnumProperty extends Property:
-	var choices : PackedStringArray
+	var choices : Array[String]
 	
-	func _init(_name,_choices,_default = null):
+	func _init(_name : String, _choices : Array[String], _default = null) -> void:
 		@warning_ignore("return_value_discarded")
 		super("item_selected", "", _name, _default)
 		choices = _choices
@@ -97,7 +97,7 @@ class EnumProperty extends Property:
 
 
 class StringProperty extends Property:
-	func _init(_name : String,_default := ""):
+	func _init(_name : String, _default := "") -> void:
 		@warning_ignore("return_value_discarded")
 		super("text_changed", "text", _name, _default)
 	
@@ -106,7 +106,7 @@ class StringProperty extends Property:
 
 
 class BoolProperty extends Property:
-	func _init(_name,_default := false):
+	func _init(_name : String, _default := false) -> void:
 		@warning_ignore("return_value_discarded")
 		super("toggled", "button_pressed", _name, _default)
 	
@@ -121,13 +121,13 @@ class RangeProperty extends Property:
 	
 	const FloatSlider = preload("float_slider/float_slider.gd")
 	
-	func _init(_name,_default,_step):
+	func _init(_name : String, _default : float, _step : float) -> void:
 		@warning_ignore("return_value_discarded")
 		super("changed", "value", _name, _default)
 		step = _step
 	
 	func _get_control() -> Control:
-		var slider : FloatSlider = preload(
+		var slider: FloatSlider = preload(
 				"float_slider/float_slider.tscn").instantiate()
 		slider.min_value = from
 		slider.max_value = to
@@ -136,7 +136,8 @@ class RangeProperty extends Property:
 
 
 class IntProperty extends RangeProperty:
-	func _init(_name,_from=0,_to=100,_default = _from,_step = 1):
+	func _init(_name : String, _from := 0, _to := 100, _default := _from,
+				_step := 1) -> void:
 		@warning_ignore("return_value_discarded")
 		super(_name, _default, _step)
 		from = _from
@@ -144,7 +145,8 @@ class IntProperty extends RangeProperty:
 
 
 class FloatProperty extends RangeProperty:
-	func _init(_name,_from=0.0,_to=1.0,_default = _from,_step = 0.01):
+	func _init(_name : String, _from := 0.0, _to := 1.0, _default := _from,
+				_step := 0.01) -> void:
 		@warning_ignore("return_value_discarded")
 		super(_name, _default, _step)
 		from = _from
@@ -152,7 +154,7 @@ class FloatProperty extends RangeProperty:
 
 
 class ColorProperty extends Property:
-	func _init(_name,_default := Color.WHITE):
+	func _init(_name : String, _default := Color.WHITE) -> void:
 		@warning_ignore("return_value_discarded")
 		super("color_changed", "color", _name, _default)
 	
@@ -163,8 +165,7 @@ class ColorProperty extends Property:
 class FilePathProperty extends Property:
 	var options: Dictionary
 
-	func _init(_name : String, _default := "",
-			_options := {}):
+	func _init(_name : String, _default := "", _options := {}) -> void:
 		@warning_ignore("return_value_discarded")
 		super("changed", "path", _name, _default)
 		options = _options
