@@ -3,7 +3,7 @@ extends LineEdit
 ## A number slider similar to that found in Godot Engine's inspector.
 
 ## Emitted when the user changes the value by sliding or by typing it in.
-signal changed
+signal value_changed(value: float)
 
 ## The current number.
 @export var value : float:
@@ -65,7 +65,7 @@ func _input(event : InputEvent) -> void:
 					global_position.x,
 					global_position.x + size.x, min_value, max_value)
 			@warning_ignore("return_value_discarded")
-			changed.emit()
+			value_changed.emit(value)
 		elif _dragging:
 			# Disabled to support more input methods, mainly graphic tablets
 			# in absolute mode.
@@ -74,7 +74,7 @@ func _input(event : InputEvent) -> void:
 			value += motion_ev.relative.x * ((max_value - min_value)
 					/ sensitivity) * _get_change_modifier()
 			@warning_ignore("return_value_discarded")
-			changed.emit()
+			value_changed.emit(value)
 		elif _mouse_near_grabber() and _clicked and not _text_editing:
 			_grabbed = true
 		elif in_rect and _clicked and _initialy_clicked_position.distance_to(motion_ev.position) > 4:
@@ -118,7 +118,7 @@ func _on_text_changed(new_text : String) -> void:
 		set_block_signals(false)
 		caret_column = last_carret
 		@warning_ignore("return_value_discarded")
-		emit_signal("changed")
+		emit_signal("value_changed", value)
 
 
 func _on_text_entered(new_text : String) -> void:

@@ -33,6 +33,8 @@
 
 const _PathPickerButton = preload("res://addons/property_panel/path_picker_button/path_picker_button.gd")
 
+enum SpinMode { BOX, SLIDER }
+
 class Property:
 	## Property base class.
 	
@@ -114,43 +116,51 @@ class BoolProperty extends Property:
 		return CheckBox.new()
 
 
-class RangeProperty extends Property:
+class SpinProperty extends Property:
+	var mode : SpinMode
 	var from : float
 	var to : float
 	var step : float
-	
+
 	const FloatSlider = preload("float_slider/float_slider.gd")
-	
+
 	func _init(_name : String, _default : float, _step : float) -> void:
 		@warning_ignore("return_value_discarded")
-		super("changed", "value", _name, _default)
+		super("value_changed", "value", _name, _default)
 		step = _step
-	
+
 	func _get_control() -> Control:
-		var slider: FloatSlider = preload(
-				"float_slider/float_slider.tscn").instantiate()
-		slider.min_value = from
-		slider.max_value = to
-		slider.step = step
-		return slider
+		var spin: Control
+		match mode:
+			SpinMode.BOX:
+				spin = SpinBox.new()
+			SpinMode.SLIDER:
+				spin = preload(
+						"float_slider/float_slider.tscn").instantiate() as FloatSlider
+		spin.min_value = from
+		spin.max_value = to
+		spin.step = step
+		return spin
 
 
-class IntProperty extends RangeProperty:
-	func _init(_name : String, _from := 0, _to := 100, _default := _from,
-				_step := 1) -> void:
+class IntProperty extends SpinProperty:
+	func _init(_name: String, _from: int = 0, _to: int = 100, _default: int = _from, 
+			_step: int = 1, _mode: SpinMode = SpinMode.SLIDER) -> void:
 		@warning_ignore("return_value_discarded")
 		super(_name, _default, _step)
 		from = _from
 		to = _to
+		mode = _mode
 
 
-class FloatProperty extends RangeProperty:
-	func _init(_name : String, _from := 0.0, _to := 1.0, _default := _from,
-				_step := 0.01) -> void:
+class FloatProperty extends SpinProperty:
+	func _init(_name: String, _from: float = 0.0, _to: float = 1.0, _default: float = _from, 
+			_step:float = 0.01, _mode: SpinMode = SpinMode.SLIDER) -> void:
 		@warning_ignore("return_value_discarded")
 		super(_name, _default, _step)
 		from = _from
 		to = _to
+		mode = _mode
 
 
 class ColorProperty extends Property:
