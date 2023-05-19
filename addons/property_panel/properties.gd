@@ -144,7 +144,8 @@ class SpinProperty extends Property:
 
 
 class IntProperty extends SpinProperty:
-	func _init(_name: String, _from: int = 0, _to:int = 100, _default:int = _from, _step:int = 1, _mode:SPIN_MODE = SPIN_MODE.SLIDER) -> void:
+	func _init(_name: String, _from: int = 0, _to: int = 100, _default: int = _from, 
+			_step: int = 1, _mode: SPIN_MODE = SPIN_MODE.SLIDER) -> void:
 		@warning_ignore("return_value_discarded")
 		super(_name, _default, _step)
 		from = _from
@@ -153,7 +154,8 @@ class IntProperty extends SpinProperty:
 
 
 class FloatProperty extends SpinProperty:
-	func _init(_name: String, _from:float = 0.0, _to:float = 1.0, _default:float = _from, _step:float = 0.01, _mode:SPIN_MODE = SPIN_MODE.SLIDER) -> void:
+	func _init(_name: String, _from: float = 0.0, _to: float = 1.0, _default: float = _from, 
+			_step:float = 0.01, _mode: SPIN_MODE = SPIN_MODE.SLIDER) -> void:
 		@warning_ignore("return_value_discarded")
 		super(_name, _default, _step)
 		from = _from
