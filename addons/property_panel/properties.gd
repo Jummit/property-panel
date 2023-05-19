@@ -126,11 +126,11 @@ class SpinProperty extends Property:
 
 	func _init(_name, _default, _step):
 		@warning_ignore("return_value_discarded")
-		super("changed", "value", _name, _default)
+		super("value_changed", "value", _name, _default)
 		step = _step
 
 	func _get_control() -> Control:
-		var spin
+		var spin: Control
 		match mode:
 			SPIN_MODE.BOX:
 				spin = SpinBox.new()
@@ -145,7 +145,6 @@ class SpinProperty extends Property:
 
 class IntProperty extends SpinProperty:
 	func _init(_name,_from=0,_to=100,_default = _from,_step = 1, _mode = SPIN_MODE.SLIDER):
-		print(_mode)
 		@warning_ignore("return_value_discarded")
 		super(_name, _default, _step)
 		from = _from
