@@ -33,7 +33,7 @@
 
 const _PathPickerButton = preload("res://addons/property_panel/path_picker_button/path_picker_button.gd")
 
-enum SPIN_MODE { BOX, SLIDER }
+enum SpinMode { BOX, SLIDER }
 
 class Property:
 	## Property base class.
@@ -117,7 +117,7 @@ class BoolProperty extends Property:
 
 
 class SpinProperty extends Property:
-	var mode : SPIN_MODE
+	var mode : SpinMode
 	var from : float
 	var to : float
 	var step : float
@@ -132,9 +132,9 @@ class SpinProperty extends Property:
 	func _get_control() -> Control:
 		var spin: Control
 		match mode:
-			SPIN_MODE.BOX:
+			SpinMode.BOX:
 				spin = SpinBox.new()
-			SPIN_MODE.SLIDER:
+			SpinMode.SLIDER:
 				spin = preload(
 						"float_slider/float_slider.tscn").instantiate() as FloatSlider
 		spin.min_value = from
@@ -145,7 +145,7 @@ class SpinProperty extends Property:
 
 class IntProperty extends SpinProperty:
 	func _init(_name: String, _from: int = 0, _to: int = 100, _default: int = _from, 
-			_step: int = 1, _mode: SPIN_MODE = SPIN_MODE.SLIDER) -> void:
+			_step: int = 1, _mode: SpinMode = SpinMode.SLIDER) -> void:
 		@warning_ignore("return_value_discarded")
 		super(_name, _default, _step)
 		from = _from
@@ -155,7 +155,7 @@ class IntProperty extends SpinProperty:
 
 class FloatProperty extends SpinProperty:
 	func _init(_name: String, _from: float = 0.0, _to: float = 1.0, _default: float = _from, 
-			_step:float = 0.01, _mode: SPIN_MODE = SPIN_MODE.SLIDER) -> void:
+			_step:float = 0.01, _mode: SpinMode = SpinMode.SLIDER) -> void:
 		@warning_ignore("return_value_discarded")
 		super(_name, _default, _step)
 		from = _from
