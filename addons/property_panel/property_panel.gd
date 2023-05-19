@@ -170,6 +170,7 @@ func _on_Property_changed(value, container : PropertyContainer):
 func _on_path_picker_button_dialog_opened(path_picker: _PathPickerButton):
 	for key in path_picker.options:
 		_file_dialog[key] = path_picker.options[key]
+	_file_dialog.current_path = path_picker.path
 	_file_dialog.popup_centered_ratio(0.4)
 	_currently_choosing_path_for = path_picker
 
