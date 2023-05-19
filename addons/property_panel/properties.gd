@@ -124,7 +124,7 @@ class SpinProperty extends Property:
 
 	const FloatSlider = preload("float_slider/float_slider.gd")
 
-	func _init(_name, _default, _step):
+	func _init(_name : String, _default : float, _step : float) -> void:
 		@warning_ignore("return_value_discarded")
 		super("value_changed", "value", _name, _default)
 		step = _step
@@ -144,7 +144,7 @@ class SpinProperty extends Property:
 
 
 class IntProperty extends SpinProperty:
-	func _init(_name,_from=0,_to=100,_default = _from,_step = 1, _mode = SPIN_MODE.SLIDER):
+	func _init(_name: String, _from: int = 0, _to:int = 100, _default:int = _from, _step:int = 1, _mode:SPIN_MODE = SPIN_MODE.SLIDER) -> void:
 		@warning_ignore("return_value_discarded")
 		super(_name, _default, _step)
 		from = _from
@@ -153,7 +153,7 @@ class IntProperty extends SpinProperty:
 
 
 class FloatProperty extends SpinProperty:
-	func _init(_name,_from=0.0,_to=1.0,_default = _from,_step = 0.01, _mode = SPIN_MODE.SLIDER):
+	func _init(_name: String, _from:float = 0.0, _to:float = 1.0, _default:float = _from, _step:float = 0.01, _mode:SPIN_MODE = SPIN_MODE.SLIDER) -> void:
 		@warning_ignore("return_value_discarded")
 		super(_name, _default, _step)
 		from = _from
