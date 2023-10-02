@@ -1,5 +1,5 @@
 extends LineEdit
-
+class_name FloatSlider
 ## A number slider similar to that found in Godot Engine's inspector.
 
 ## Emitted when the user changes the value by sliding or by typing it in.
@@ -18,6 +18,8 @@ signal value_changed(value: float)
 @export var step : float
 ## The sensitivity while dragging with the mouse to change the value.
 @export var sensitivity := 1000.0
+## The expression to evaluate to get the value.
+@export var expression := true
 
 @onready var _knob: Control = %Knob
 
@@ -29,6 +31,7 @@ var _grabbed := false
 var _clicked := false
 var _text_editing := false
 var _initialy_clicked_position : Vector2
+var _expression := Expression.new()
 
 const _NOT_CLICKED = Vector2.ZERO
 
@@ -122,7 +125,11 @@ func _on_text_changed(new_text : String) -> void:
 
 
 func _on_text_entered(new_text : String) -> void:
-	value = new_text.to_float()
+	if expression:
+		_expression.parse(new_text)
+		value = _expression.execute()
+	else:
+		value = new_text.to_float()
 	release_focus()
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
