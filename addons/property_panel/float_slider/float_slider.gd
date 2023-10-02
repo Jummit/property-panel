@@ -18,8 +18,8 @@ signal value_changed(value: float)
 @export var step : float
 ## The sensitivity while dragging with the mouse to change the value.
 @export var sensitivity := 1000.0
-## The expression to evaluate to get the value.
-@export var expression := true
+## The allow expressions to evaluate to get the value.
+@export var allow_expressions := true
 
 @onready var _knob: Control = %Knob
 
@@ -125,9 +125,12 @@ func _on_text_changed(new_text : String) -> void:
 
 
 func _on_text_entered(new_text : String) -> void:
-	if expression:
-		_expression.parse(new_text)
-		value = _expression.execute()
+	if allow_expressions:
+		var error = _expression.parse(new_text)
+		if error != OK:
+			push_error(_expression.get_error_text())
+		elif not _expression.has_execute_failed():
+			value = float(_expression.execute())
 	else:
 		value = new_text.to_float()
 	release_focus()
