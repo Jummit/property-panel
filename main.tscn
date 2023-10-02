@@ -54,3 +54,5 @@ grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(60, 60)
 texture = ExtResource("3_5w8pe")
+
+[connection signal="property_changed" from="MiddlePropertyPanel" to="." method="_on_MiddlePropertyPanel_property_changed"]
