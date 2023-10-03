@@ -24,7 +24,6 @@ script = ExtResource("2_3gfvu")
 vertical = false
 
 [node name="MiddlePropertyPanel" type="Panel" parent="."]
-custom_minimum_size = Vector2(0, 40)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

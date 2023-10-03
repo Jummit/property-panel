@@ -18,8 +18,6 @@ signal value_changed(value: float)
 @export var step : float
 ## The sensitivity while dragging with the mouse to change the value.
 @export var sensitivity := 1000.0
-## The allow expressions to evaluate to get the value.
-@export var allow_expressions := true
 
 @onready var _knob: Control = %Knob
 
@@ -108,33 +106,33 @@ func _on_focus_entered() -> void:
 func _on_focus_exited():
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_text_editing = false
-	text = str(value)
-
-
-func _on_text_changed(new_text : String) -> void:
-	if new_text.is_valid_float():
-		var last_carret := caret_column
-		value = new_text.to_float()
-		# Avoid emitting [method _on_text_changed].
-		set_block_signals(true)
+	var new_text = str(value)
+	if(new_text != text):
 		text = new_text
-		set_block_signals(false)
-		caret_column = last_carret
 		@warning_ignore("return_value_discarded")
 		emit_signal("value_changed", value)
 
 
-func _on_text_entered(new_text : String) -> void:
-	if allow_expressions:
-		var error = _expression.parse(new_text)
-		if error != OK:
-			push_error(_expression.get_error_text())
-		elif not _expression.has_execute_failed():
-			value = float(_expression.execute())
-	else:
+func _on_text_changed(new_text : String) -> void:
+	var last_carret := caret_column
+	if new_text.is_valid_float():
 		value = new_text.to_float()
+	else:
+		var error = _expression.parse(new_text)
+		if error == OK and not _expression.has_execute_failed():
+			value = float(_expression.execute())
+	# Avoid emitting [method _on_text_changed].
+	set_block_signals(true)
+	text = new_text
+	set_block_signals(false)
+	caret_column = last_carret
+
+
+func _on_text_entered(new_text : String) -> void:
 	release_focus()
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	@warning_ignore("return_value_discarded")
+	emit_signal("value_changed", value)
 
 
 func _get_change_modifier() -> float:

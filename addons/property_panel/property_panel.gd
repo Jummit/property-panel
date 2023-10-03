@@ -137,7 +137,7 @@ func _setup_internal_nodes() -> void:
 	margin_sontainer.add_theme_constant_override("margin_left", 5)
 	margin_sontainer.add_theme_constant_override("margin_top", 5)
 	margin_sontainer.add_theme_constant_override("margin_right", 5)
-	margin_sontainer.add_theme_constant_override("margin_boottom", 5)
+	margin_sontainer.add_theme_constant_override("margin_bottom", 5)
 	margin_sontainer.add_child(_properties_container)
 	var scroll_container := ScrollContainer.new()
 	scroll_container.anchor_right = 1
