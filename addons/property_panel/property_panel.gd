@@ -47,7 +47,7 @@ var _properties_container := BoxContainer.new()
 func _ready() -> void:
 	_setup_internal_nodes()
 	# Avoid scrollbar when the layout is vertical.
-	custom_minimum_size.y = min(40, custom_minimum_size.y)
+	custom_minimum_size.y = max(40, custom_minimum_size.y)
 
 
 ## Returns the current value of a property control.
