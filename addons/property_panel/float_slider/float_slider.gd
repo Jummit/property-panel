@@ -1,5 +1,5 @@
 extends LineEdit
-
+class_name FloatSlider
 ## A number slider similar to that found in Godot Engine's inspector.
 
 ## Emitted when the user changes the value by sliding or by typing it in.
@@ -29,6 +29,7 @@ var _grabbed := false
 var _clicked := false
 var _text_editing := false
 var _initialy_clicked_position : Vector2
+var _expression := Expression.new()
 
 const _NOT_CLICKED = Vector2.ZERO
 
@@ -105,26 +106,33 @@ func _on_focus_entered() -> void:
 func _on_focus_exited():
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_text_editing = false
-	text = str(value)
-
-
-func _on_text_changed(new_text : String) -> void:
-	if new_text.is_valid_float():
-		var last_carret := caret_column
-		value = new_text.to_float()
-		# Avoid emitting [method _on_text_changed].
-		set_block_signals(true)
+	var new_text = str(value)
+	if(new_text != text):
 		text = new_text
-		set_block_signals(false)
-		caret_column = last_carret
 		@warning_ignore("return_value_discarded")
 		emit_signal("value_changed", value)
 
 
+func _on_text_changed(new_text : String) -> void:
+	var last_carret := caret_column
+	if new_text.is_valid_float():
+		value = new_text.to_float()
+	else:
+		var error = _expression.parse(new_text)
+		if error == OK and not _expression.has_execute_failed():
+			value = float(_expression.execute())
+	# Avoid emitting [method _on_text_changed].
+	set_block_signals(true)
+	text = new_text
+	set_block_signals(false)
+	caret_column = last_carret
+
+
 func _on_text_entered(new_text : String) -> void:
-	value = new_text.to_float()
 	release_focus()
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	@warning_ignore("return_value_discarded")
+	emit_signal("value_changed", value)
 
 
 func _get_change_modifier() -> float:

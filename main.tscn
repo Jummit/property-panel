@@ -24,7 +24,6 @@ script = ExtResource("2_3gfvu")
 vertical = false
 
 [node name="MiddlePropertyPanel" type="Panel" parent="."]
-custom_minimum_size = Vector2(0, 40)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -54,3 +53,5 @@ grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(60, 60)
 texture = ExtResource("3_5w8pe")
+
+[connection signal="property_changed" from="MiddlePropertyPanel" to="." method="_on_MiddlePropertyPanel_property_changed"]
